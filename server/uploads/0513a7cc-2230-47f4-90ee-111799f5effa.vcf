@@ -1,0 +1,11 @@
+##fileformat=VCFv4.2
+##INFO=<ID=GENE,Number=1,Type=String,Description="Gene Symbol">
+#CHROM  POS        ID           REF ALT QUAL FILTER INFO
+22      42128945   rs3892097    G   A   .    PASS   GENE=CYP2D6
+10      96521616   rs4244285    G   A   .    PASS   GENE=CYP2C19
+10      96702047   rs4986893    G   A   .    PASS   GENE=CYP2C19
+16      31104878   rs4149056    T   C   .    PASS   GENE=SLCO1B1
+6       18130918   rs1800460    G   C   .    PASS   GENE=TPMT
+6       18139211   rs1142345    T   T   .    PASS   GENE=TPMT
+1       97883300   rs3918290    G   A   .    PASS   GENE=DPYD
+10      96741053   rs1057910    A   C   .    PASS   GENE=CYP2C9
