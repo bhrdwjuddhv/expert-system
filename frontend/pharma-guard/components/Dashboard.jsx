@@ -32,7 +32,7 @@ export default function Dashboard() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`/api/analysis/${analysisId}`);
+        const response = await fetch(`http://localhost:5000/api/results/${analysisId}`);
         const result = await response.json();
 
         if (!response.ok) {
@@ -71,23 +71,25 @@ export default function Dashboard() {
       </div>
     );
 
-  const filteredResults =
-    selectedGene === "ALL"
-      ? data.results
-      : data.results.filter((r) => r.primary_gene === selectedGene);
+const filteredResults =
+  selectedGene === "ALL"
+    ? data.results
+    : data.results.filter((r) => r.gene === selectedGene);
+
 
   const helixVariants = filteredResults.flatMap((result) =>
-    (result.pharmacogenomic_profile?.detected_variants || []).map((v) => ({
+    (result.variants || []).map((v) => ({
       rsid: v.rsid,
       position: v.position,
       risk_label: result.risk_label,
     })),
   );
 
-  const chartData = filteredResults.map((item) => ({
-    drug: item.drug,
-    confidence: Math.round(item.confidence_score * 100),
-  }));
+const chartData = filteredResults.map((item) => ({
+  drug: item.drug,
+  confidence: 100,
+}));
+
 
   const downloadJSON = () => {
     const blob = new Blob([JSON.stringify(data, null, 2)], {
@@ -156,10 +158,12 @@ export default function Dashboard() {
 
               <div className="text-sm text-gray-400 space-y-1">
                 <p>
-                  <strong>Gene:</strong> {result.primary_gene}
+                  <strong>Gene:</strong> {result.gene}
                 </p>
                 <p>
-                  <strong>Diplotype:</strong> {result.diplotype}
+                  {result.diplotype && (
+                  <p><strong>Diplotype:</strong> {result.diplotype}</p>
+                  )}
                 </p>
                 <p>
                   <strong>Phenotype:</strong> {result.phenotype}
