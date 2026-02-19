@@ -23,59 +23,73 @@ const RISK_COLORS = {
     Unknown: "#a855f7",
 };
 
-/* =========================
-   DASHBOARD
-========================= */
-
 export default function Dashboard() {
     const { analysisId } = useParams();
+
     const [data, setData] = useState(null);
     const [selectedGene, setSelectedGene] = useState("ALL");
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
 
     /* =========================
-       FETCH DATA
+       FETCH DATA FROM BACKEND
     ========================= */
 
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await fetch(`/api/analysis/${analysisId}`);
-                const result = await response.json();
+        if (!analysisId) return;
 
-                if (!response.ok) {
-                    throw new Error(result.message || "Failed to load analysis.");
+        const fetchAnalysis = async () => {
+            try {
+                setLoading(true);
+                setError("");
+
+                const res = await fetch(
+                    `http://localhost:5000/api/analysis/${analysisId}`
+                );
+
+                if (!res.ok) {
+                    throw new Error("Analysis not found.");
                 }
 
+                const result = await res.json();
                 setData(result);
             } catch (err) {
-                setError(err.message);
+                setError(err.message || "Failed to load analysis.");
             } finally {
                 setLoading(false);
             }
         };
 
-        fetchData();
+        fetchAnalysis();
     }, [analysisId]);
 
     /* =========================
-       LOADING / ERROR
+       LOADING / ERROR STATES
     ========================= */
 
-    if (loading)
+    if (loading) {
         return (
             <div className="min-h-screen bg-slate-950 text-white flex items-center justify-center">
                 Loading analysis...
             </div>
         );
+    }
 
-    if (error)
+    if (error) {
         return (
             <div className="min-h-screen bg-slate-950 text-red-400 flex items-center justify-center">
                 {error}
             </div>
         );
+    }
+
+    if (!data || !data.results) {
+        return (
+            <div className="min-h-screen bg-slate-950 text-white flex items-center justify-center">
+                No data available.
+            </div>
+        );
+    }
 
     /* =========================
        FILTER LOGIC
@@ -87,8 +101,8 @@ export default function Dashboard() {
             : data.results.filter((r) => r.primary_gene === selectedGene);
 
     /* =========================
-   3D VARIANT EXTRACTION
-========================= */
+       3D VARIANT EXTRACTION
+    ========================= */
 
     const helixVariants = filteredResults.flatMap((result) =>
         (result.pharmacogenomic_profile?.detected_variants || []).map((v) => ({
@@ -97,7 +111,6 @@ export default function Dashboard() {
             risk_label: result.risk_label,
         }))
     );
-
 
     /* =========================
        CHART DATA
@@ -135,10 +148,13 @@ export default function Dashboard() {
         <div className="min-h-screen bg-slate-950 text-white px-6 py-12">
             <div className="max-w-6xl mx-auto">
 
-                {/* TITLE */}
-                <h1 className="text-3xl font-bold mb-8">
-                    Risk Assessment Results
+                {/* HEADER */}
+                <h1 className="text-3xl font-bold mb-2">
+                    Analysis ID: {analysisId}
                 </h1>
+                <p className="text-gray-400 mb-8">
+                    AI-powered pharmacogenomic risk assessment
+                </p>
 
                 {/* GENE FILTER */}
                 <div className="flex flex-wrap gap-3 mb-8">
@@ -167,7 +183,9 @@ export default function Dashboard() {
                             className="bg-slate-900 rounded-2xl p-6 border border-cyan-500/20 shadow-lg"
                         >
                             <div className="flex justify-between items-center mb-4">
-                                <h2 className="text-xl font-semibold">{result.drug}</h2>
+                                <h2 className="text-xl font-semibold">
+                                    {result.drug}
+                                </h2>
                                 <span
                                     className="px-3 py-1 rounded-full text-sm font-medium"
                                     style={{
@@ -211,23 +229,15 @@ export default function Dashboard() {
                     ))}
                 </div>
 
-                {/* =========================
-   3D GENE VISUALIZATION
-========================= */}
-
+                {/* 3D VISUALIZATION */}
                 <div className="mb-12">
-                    <div className="flex items-center justify-between mb-4">
-                        <h2 className="text-xl font-semibold text-cyan-400">
-                            3D Gene Variant Visualization
-                        </h2>
-                        <span className="text-sm text-gray-400">
-      Interactive genomic mapping
-    </span>
-                    </div>
+                    <h2 className="text-xl font-semibold text-cyan-400 mb-4">
+                        3D Gene Variant Visualization
+                    </h2>
 
                     {helixVariants.length === 0 ? (
                         <div className="bg-slate-900 p-6 rounded-2xl border border-cyan-500/20 text-gray-400">
-                            No variants detected for this gene.
+                            No variants detected.
                         </div>
                     ) : (
                         <GeneVisualizer
@@ -237,8 +247,7 @@ export default function Dashboard() {
                     )}
                 </div>
 
-
-                {/* CONFIDENCE CHART */}
+                {/* CHART */}
                 <div className="bg-slate-900 p-6 rounded-2xl border border-cyan-500/20 mb-12">
                     <h2 className="text-lg font-semibold mb-4">
                         Confidence Overview
@@ -257,10 +266,6 @@ export default function Dashboard() {
 
                 {/* JSON EXPORT */}
                 <div className="bg-slate-900 p-6 rounded-2xl border border-cyan-500/20">
-                    <h2 className="text-lg font-semibold mb-4">
-                        Structured JSON Output
-                    </h2>
-
                     <div className="flex gap-4 mb-4">
                         <button
                             onClick={downloadJSON}
@@ -273,7 +278,7 @@ export default function Dashboard() {
                             onClick={copyJSON}
                             className="px-4 py-2 border border-cyan-600 rounded-lg"
                         >
-                            Copy to Clipboard
+                            Copy JSON
                         </button>
                     </div>
 

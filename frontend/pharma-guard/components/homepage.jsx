@@ -214,6 +214,7 @@ export default function HomePage() {
                         transition={{ duration: 0.6 }}
                         viewport={{ once: true }}
                         className="text-center mb-20"
+                        id = "steps"
                     >
                         <p className="text-cyan-400 uppercase tracking-widest text-sm mb-4">
                             Process
