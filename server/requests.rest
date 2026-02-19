@@ -22,11 +22,11 @@
 # --boundary--
 
 
-### Clinical Chat
-POST http://localhost:5000/api/chat
-Content-Type: application/json
+# ### Clinical Chat
+# POST http://localhost:5000/api/chat
+# Content-Type: application/json
 
-{
-  "analysisId": "65f8a7c9d41b2a1234567890",
-  "question": "Why is codeine not recommended?"
-}
+# {
+#   "analysisId": "65f8a7c9d41b2a1234567890",
+#   "question": "Why is codeine not recommended?"
+# }

@@ -26,14 +26,14 @@ const chatController = {
       // 1️⃣ Fetch analysis
       const analysis = await Analysis.findById(analysisId);
 
-      if (!analysis) {
+      if (!analysis.results || !Array.isArray(analysis.results)) {
         return res.status(404).json({
           error: true,
           message: "Analysis not found",
         });
       }
-
-      if (!analysis.results || !analysis.results.drug_results) {
+      console.log(analysis.results);
+      if (!analysis.results) {
         return res.status(400).json({
           error: true,
           message: "Invalid analysis results structure",
@@ -41,7 +41,7 @@ const chatController = {
       }
 
       // 2️⃣ Build structured clinical summary
-      const summaryContext = analysis.results.drug_results
+      const summaryContext = analysis.results
         .map(
           (r) => `
 Drug: ${r.drug}
@@ -55,34 +55,39 @@ Severity: ${r.severity}
 
       // 3️⃣ Build safe clinical prompt
       const prompt = `
-You are a clinical pharmacogenomics assistant.
+You are a friendly clinical pharmacogenomics assistant.
 
-Below is a structured summary of the patient's pharmacogenomic results:
+Below is the patient's genetic medication summary:
 
 ${summaryContext}
 
-Clinical Question:
+Question:
 ${question}
 
 Instructions:
-- Be medically accurate.
-- Only use the genetic information provided above.
-- Do NOT fabricate new genes, variants, or results.
-- If information is insufficient, clearly state that.
-- Provide explanation under these sections:
+- Answer in simple, patient-friendly language.
+- Maximum 120 words.
+- Do not use headings.
+- Do not sound academic.
+- Do not mention contradictions.
+- Only use the genetic data provided.
+- If the drug is safe, clearly say it is safe.
+- If there is a risk, explain it simply.
 
-1. Interpretation
-2. Clinical Implication
-3. Recommendation (if applicable)
-
-Keep the response professional and concise.
+Keep it clear, calm, and easy to understand.
 `;
+
 
       // 4️⃣ Call Gemini
       const response = await ai.models.generateContent({
-        model: "gemini-3-flash-preview",
-        contents: prompt,
-      });
+  model: "gemini-3-flash-preview",
+  contents: prompt,
+  generationConfig: {
+    maxOutputTokens: 250,
+    temperature: 0.4
+  }
+});
+
 
       // Safe extraction of text
       const answer =

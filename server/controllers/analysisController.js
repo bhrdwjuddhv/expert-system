@@ -30,35 +30,30 @@ const analysisController = {
       const phenotypes = phenotypeMapper.map(diplotypes);
 
       // 4️⃣ Classify risks
-      const risks = riskEngine.classify(phenotypes, drugs);
+      const riskResult = riskEngine.classify(phenotypes, drugs);
+      const resultsArray = riskResult.drug_results; // ✅ extract array
 
-      // 5️⃣ Generate LLM explanations
-      const explanations = await llmService.explain(risks);
+      // 5️⃣ Generate LLM explanations (returns merged array)
+      const explainedResults = await llmService.explain(resultsArray);
 
-      // Merge explanations into risks
-      const finalResults = {
-        ...risks,
-        llm_generated_explanation: explanations,
-      };
-
-      // 6️⃣ Save to MongoDB
+      // 6️⃣ Save to MongoDB (must be ARRAY)
       const analysis = await Analysis.create({
-        uploadId,
-        drugs,
-        results: finalResults,
-        createdAt: new Date(),
+        patient_id: `PATIENT_${Date.now()}`,
+        results: explainedResults,
       });
 
       // 7️⃣ Return results
       return res.status(200).json({
         analysisId: analysis._id,
-        results: finalResults,
+        results: explainedResults,
       });
+
     } catch (error) {
-      console.error(error);
+      console.error("FULL ERROR:", error);
       return res.status(500).json({
         error: true,
-        message: "Analysis failed",
+        message: error.message,
+        stack: error.stack,
       });
     }
   },
@@ -83,6 +78,7 @@ const analysisController = {
         analysisId: analysis._id,
         results: analysis.results,
       });
+
     } catch (error) {
       console.error(error);
       return res.status(500).json({
