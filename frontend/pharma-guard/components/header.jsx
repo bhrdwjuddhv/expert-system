@@ -11,16 +11,8 @@ const NAV_ITEMS = [
   { name: "Contact", path: "/contact" },
 ];
 
-const AUTH_ROUTES = {
-  login: "/login",
-  signup: "/signup",
-};
-
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
-
-  // Replace later with auth context
-  const isLoggedIn = false;
 
   return (
       <header className="flex shadow-md py-4 px-4 sm:px-10 bg-slate-950 border-b border-cyan-500/20 min-h-[70px] tracking-wide relative z-50 text-white">
@@ -72,32 +64,14 @@ export default function Header() {
             </ul>
           </div>
 
-          {/* ACTION BUTTONS */}
+          {/* PRIMARY CTA BUTTON */}
           <div className="flex max-lg:ml-auto space-x-4 items-center">
-            {!isLoggedIn ? (
-                <>
-                  <Link
-                      to={AUTH_ROUTES.login}
-                      className="px-4 py-2 text-sm rounded-full font-medium border border-gray-600 hover:border-cyan-500 hover:text-cyan-400 transition"
-                  >
-                    Login
-                  </Link>
-
-                  <Link
-                      to="/upload"
-                      className="px-5 py-2 text-sm rounded-full font-medium text-white bg-cyan-600 hover:bg-cyan-700 transition shadow-lg"
-                  >
-                    Analyze Genome
-                  </Link>
-                </>
-            ) : (
-                <Link
-                    to="/dashboard"
-                    className="px-5 py-2 text-sm rounded-full font-medium text-white bg-cyan-600 hover:bg-cyan-700 transition"
-                >
-                  Dashboard
-                </Link>
-            )}
+            <Link
+                to="/upload"
+                className="px-5 py-2 text-sm rounded-full font-medium text-white bg-cyan-600 hover:bg-cyan-700 transition shadow-lg"
+            >
+              Analyze Genome
+            </Link>
 
             {/* MOBILE MENU BUTTON */}
             <button
