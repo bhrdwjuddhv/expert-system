@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import DNAMolecule from "./gene/DNAMolecule.jsx";
 
 const HOW_IT_WORKS_STEPS = [
   {
@@ -140,10 +141,13 @@ function Hero() {
         </div>
 
         <div className="flex flex-1 items-center justify-center">
-          <div className="relative h-80 w-80 sm:h-96 sm:w-96">
-            <div className="absolute inset-8 rounded-full bg-cyan-500/20 animate-pulse" />
-            <div className="absolute inset-0 rounded-full border border-dashed border-cyan-500/20 animate-spin [animation-duration:40s]" />
-          </div>
+            <div className="relative h-80 w-80 sm:h-96 sm:w-96 flex items-center justify-center">
+                <div className="absolute inset-0 rounded-full border border-cyan-500/20" />
+                <div className="absolute inset-4 rounded-full bg-cyan-500/5 backdrop-blur-md" />
+
+                <DNAMolecule />
+            </div>
+
         </div>
       </div>
     </section>

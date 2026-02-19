@@ -1,1 +1,78 @@
 @import "tailwindcss";
+/* ================= DNA 3D MOLECULE ================= */
+
+.dna-wrapper {
+    width: 100%;
+    height: 100%;
+    perspective: 1000px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.dna {
+    position: relative;
+    width: 120px;
+    height: 300px;
+    transform-style: preserve-3d;
+    transform: rotateX(45deg) rotateZ(45deg);
+    animation: rotateDNA 12s linear infinite;
+}
+
+@keyframes rotateDNA {
+    from {
+        transform: rotateX(45deg) rotateZ(45deg) rotateY(0deg);
+    }
+    to {
+        transform: rotateX(45deg) rotateZ(45deg) rotateY(360deg);
+    }
+}
+
+.dna-rung {
+    position: absolute;
+    width: 120px;
+    height: 4px;
+    top: calc(var(--i) * 12px);
+    transform-style: preserve-3d;
+    animation: twist 4s ease-in-out infinite alternate;
+    animation-delay: calc(var(--i) * 0.1s);
+}
+
+@keyframes twist {
+    from {
+        transform: rotateY(0deg);
+    }
+    to {
+        transform: rotateY(180deg);
+    }
+}
+
+.dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    position: absolute;
+    top: -3px;
+}
+
+.dot.left {
+    left: 0;
+    background: #06b6d4;
+    box-shadow: 0 0 10px #06b6d4;
+}
+
+.dot.right {
+    right: 0;
+    background: #22d3ee;
+    box-shadow: 0 0 10px #22d3ee;
+}
+
+.connector {
+    position: absolute;
+    left: 10px;
+    right: 10px;
+    height: 2px;
+    background: linear-gradient(to right, #06b6d4, #22d3ee);
+    top: 1px;
+    opacity: 0.6;
+}

@@ -1,6 +1,6 @@
 import {useEffect, useState} from "react";
 import {Link, NavLink, useLocation} from "react-router-dom";
-
+import Logo from "./Logo.jsx";
 /* -------- CONFIG -------- */
 
 const NAV_ITEMS = [
@@ -55,9 +55,7 @@ export default function Header() {
 
           {/* LOGO */}
           <Link to="/" className="flex items-center gap-2">
-            <div className="w-9 h-9 bg-cyan-600 rounded-xl flex items-center justify-center font-bold text-white">
-              PG
-            </div>
+            <Logo  height={48} width={48} />
             <span className="text-xl font-semibold tracking-wide">
             Pharma<span className="text-cyan-400">Guard</span>
           </span>

@@ -5,6 +5,7 @@ import UploadPage from "../components/genomeupload.jsx";
 import ContactPage from "../components/ContactPage.jsx";
 import Dashboard from "../components/Dashboard.jsx";
 import PatientLookup from "../components/PatientLookup.jsx";
+import ClinicalChat from "../components/ClinicalChat.jsx";
 
 import Azathioprine from "../components/Drugs/Azathioprine";
 import Clopidogrel from "../components/Drugs/Clopidogrel";
@@ -33,6 +34,7 @@ function App() {
                 <Route path="/contact" element={<ContactPage />} />
                 <Route path="/dashboard/:analysisId" element={<Dashboard />} />
                 <Route path="/dashboard" element={<PatientLookup />} />
+                <Route path="/chat/:analysisId" element={<ClinicalChat />} />
 
 
 

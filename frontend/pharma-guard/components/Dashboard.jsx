@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams , useNavigate } from "react-router-dom";
+
 import {
   BarChart,
   Bar,
@@ -25,6 +26,8 @@ export default function Dashboard() {
   const [selectedGene, setSelectedGene] = useState("ALL");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const navigate = useNavigate();
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -204,6 +207,51 @@ export default function Dashboard() {
             </BarChart>
           </ResponsiveContainer>
         </div>
+
+        {/*ChatBot*/}
+        <div className="flex justify-end mb-8">
+          <button
+              onClick={() => navigate(`/chat/${analysisId}`)}
+              className="group relative"
+          >
+            {/* Glow Layer */}
+            <div className="absolute inset-0 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-2xl blur-xl opacity-40 group-hover:opacity-70 transition duration-300" />
+
+            {/* Main Button */}
+            <div className="relative px-6 py-3 rounded-2xl bg-gradient-to-r from-cyan-600 to-blue-600 text-white font-semibold shadow-lg
+                    transform transition-all duration-300
+                    group-hover:-translate-y-1 group-hover:shadow-[0_15px_35px_rgba(6,182,212,0.4)]
+                    active:translate-y-0 active:shadow-md flex items-center gap-3">
+
+              {/* AI Brain SVG */}
+              <div className="w-8 h-8 bg-white/10 rounded-full flex items-center justify-center backdrop-blur">
+                <svg
+                    className="w-5 h-5 text-cyan-200"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    viewBox="0 0 24 24"
+                >
+                  <path d="M9 3a4 4 0 018 0 4 4 0 013 6.9V11a4 4 0 01-4 4H8a4 4 0 01-4-4v-1.1A4 4 0 019 3z" />
+                  <path d="M12 7v4M9 11h6M10 15h4" />
+                </svg>
+              </div>
+
+              {/* Text */}
+              <span className="tracking-wide">
+        Clinical AI Assistant
+      </span>
+
+              {/* Animated Pulse Dot */}
+              <span className="relative flex h-3 w-3">
+        <span className="absolute inline-flex h-full w-full rounded-full bg-cyan-300 opacity-75 animate-ping"></span>
+        <span className="relative inline-flex rounded-full h-3 w-3 bg-cyan-200"></span>
+      </span>
+
+            </div>
+          </button>
+        </div>
+
 
         {/* JSON EXPORT */}
         <div className="bg-slate-900 p-6 rounded-2xl border border-cyan-500/20">

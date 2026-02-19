@@ -1,4 +1,5 @@
 import {Link} from "react-router-dom";
+import Logo from "./Logo.jsx";
 
 export default function Footer() {
   return (
@@ -11,9 +12,7 @@ export default function Footer() {
             {/* Brand */}
             <div>
               <div className="flex items-center gap-2 mb-4">
-                <div className="h-8 w-8 rounded-xl bg-cyan-600 flex items-center justify-center text-white font-bold">
-                  PG
-                </div>
+                <Logo  height={48} width={48} />
                 <h2 className="text-xl font-semibold text-white">
                   Pharma<span className="text-cyan-400">Guard</span>
                 </h2>
