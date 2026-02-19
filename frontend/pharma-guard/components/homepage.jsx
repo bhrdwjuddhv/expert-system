@@ -142,7 +142,7 @@ function Hero() {
         <div className="flex flex-1 items-center justify-center">
           <div className="relative h-80 w-80 sm:h-96 sm:w-96">
             <div className="absolute inset-8 rounded-full bg-cyan-500/20 animate-pulse" />
-            <div className="absolute inset-0 rounded-full border border-dashed border-cyan-500/20 animate-spin [animation-duration:30s]" />
+            <div className="absolute inset-0 rounded-full border border-dashed border-cyan-500/20 animate-spin [animation-duration:40s]" />
           </div>
         </div>
       </div>
@@ -153,13 +153,20 @@ function Hero() {
 function GlassCard({ title, description, delay }) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 30 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.9, delay }}
-      className="bg-white/5 backdrop-blur-md border border-cyan-500/20 p-8 rounded-2xl shadow-xl hover:border-cyan-400/40 hover:shadow-cyan-500/20 transition"
+      initial={{ opacity: 0, y: 40 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      whileHover={{ y: -10 }}
+      whileTap={{ scale: 0.98 }}
+      viewport={{ once: true }}
+      transition={{
+        delay: delay,
+        duration: 0.15,
+        ease: "easeOut",
+      }}
+      className="bg-white/10 backdrop-blur-md p-8 rounded-2xl shadow-lg"
     >
-      <h3 className="text-lg font-semibold text-cyan-400 mb-3">{title}</h3>
-      <p className="text-gray-300 text-sm leading-relaxed">{description}</p>
+      <h3 className="text-xl font-semibold mb-3">{title}</h3>
+      <p className="text-gray-400">{description}</p>
     </motion.div>
   );
 }
@@ -181,7 +188,7 @@ export default function HomePage() {
           <motion.div
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
+            transition={{ duration: 0.3 }}
             viewport={{ once: true }}
             className="text-center mb-20"
             id="steps"
@@ -197,32 +204,36 @@ export default function HomePage() {
           </motion.div>
 
           {/* STEPS GRID */}
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-10">
             {HOW_IT_WORKS_STEPS.map((step, index) => (
               <motion.div
                 key={index}
                 initial={{ opacity: 0, y: 40 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.2 }}
-                whileHover={{ y: -8 }}
+                whileHover={{ y: -10 }}
                 viewport={{ once: true }}
-                className="group relative bg-slate-900 border border-cyan-500/20 p-8 rounded-2xl transition-all duration-300 hover:border-cyan-400/50 hover:shadow-[0_0_30px_rgba(6,182,212,0.15)]"
+                className="group relative bg-slate-900 border border-cyan-500/20 
+                 p-10 min-h-[280px] 
+                 rounded-2xl transition-all duration-300 
+                 hover:border-cyan-400/50 
+                 hover:shadow-[0_0_35px_rgba(6,182,212,0.18)]"
               >
                 {/* STEP NUMBER */}
-                <div className="absolute -top-4 -left-4 w-10 h-10 bg-cyan-600 rounded-full flex items-center justify-center text-sm font-bold shadow-lg">
+                <div className="absolute -top-5 -left-5 w-12 h-12 bg-cyan-600 rounded-full flex items-center justify-center text-base font-bold shadow-lg">
                   {index + 1}
                 </div>
 
                 {/* ICON */}
-                <div className="w-14 h-14 mb-6 bg-cyan-500/20 text-cyan-400 rounded-xl flex items-center justify-center transition group-hover:bg-cyan-500/30 group-hover:scale-110">
+                <div className="w-16 h-16 mb-8 bg-cyan-500/20 text-cyan-400 rounded-xl flex items-center justify-center transition group-hover:bg-cyan-500/30 group-hover:scale-110">
                   {step.icon}
                 </div>
 
                 {/* TITLE */}
-                <h3 className="text-lg font-semibold mb-3">{step.title}</h3>
+                <h3 className="text-xl font-semibold mb-4">{step.title}</h3>
 
                 {/* DESCRIPTION */}
-                <p className="text-sm text-gray-400 leading-relaxed">
+                <p className="text-base text-gray-400 leading-relaxed">
                   {step.description}
                 </p>
               </motion.div>
