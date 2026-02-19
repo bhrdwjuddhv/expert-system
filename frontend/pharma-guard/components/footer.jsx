@@ -1,3 +1,5 @@
+import {Link} from "react-router-dom";
+
 export default function Footer() {
   return (
       <footer className="bg-slate-950 border-t border-cyan-500/20 text-gray-300">
@@ -43,12 +45,24 @@ export default function Footer() {
               <h3 className="font-semibold text-white mb-4">SUPPORTED DRUGS</h3>
 
               <ul className="space-y-3 text-sm text-gray-400">
-                <li>Codeine</li>
-                <li>Warfarin</li>
-                <li>Clopidogrel</li>
-                <li>Simvastatin</li>
-                <li>Azathioprine</li>
-                <li>Fluorouracil</li>
+                <li><Link to="/drugs/codeine" className="hover:text-cyan-400">
+                  Codeine
+                </Link></li>
+                <li><Link to="/drugs/warfarin" className="hover:text-cyan-400">
+                  Warfarin
+                </Link></li>
+                <li><Link to="/drugs/clopidogrel" className="hover:text-cyan-400">
+                  Clopidogrel
+                </Link></li>
+                <li><Link to="/drugs/simvastatin" className="hover:text-cyan-400">
+                  Simvastatin
+                </Link></li>
+                <li><Link to="/drugs/azathioprine" className="hover:text-cyan-400">
+                  Azathioprine
+                </Link></li>
+                <li><Link to="/drugs/fluorouracil" className="hover:text-cyan-400">
+                  Fluorouracil
+                </Link></li>
               </ul>
             </div>
 
@@ -57,12 +71,24 @@ export default function Footer() {
               <h3 className="font-semibold text-white mb-4">GENES ANALYZED</h3>
 
               <ul className="space-y-3 text-sm text-gray-400">
-                <li>CYP2D6</li>
-                <li>CYP2C19</li>
-                <li>CYP2C9</li>
-                <li>SLCO1B1</li>
-                <li>TPMT</li>
-                <li>DPYD</li>
+                <li><Link to="/gene/CYP2D6" className="hover:text-cyan-400">
+                  CYP2D6
+                </Link></li>
+                <li><Link to="/gene/CYP2C19" className="hover:text-cyan-400">
+                  CYP2C19
+                </Link></li>
+                <li><Link to="/gene/CYP2C9" className="hover:text-cyan-400">
+                  CYP2C9
+                </Link></li>
+                <li><Link to="/gene/SLCO1B1" className="hover:text-cyan-400">
+                  SLCO1B1
+                </Link></li>
+                <li><Link to="/gene/TPMT" className="hover:text-cyan-400">
+                  TPMT
+                </Link></li>
+                <li><Link to="/gene/DPYD" className="hover:text-cyan-400">
+                  DPYD
+                </Link></li>
               </ul>
 
               <button className="mt-4 px-4 py-2 bg-cyan-600 text-white rounded-lg text-sm hover:bg-cyan-700 transition">
