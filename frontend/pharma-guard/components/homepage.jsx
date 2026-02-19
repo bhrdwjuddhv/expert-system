@@ -1,9 +1,5 @@
 import { useEffect, useState } from "react";
-import { motion } from "motion/react";
-
-/* =========================================================
-   HOW IT WORKS DATA
-========================================================= */
+import { motion } from "framer-motion";
 
 const HOW_IT_WORKS_STEPS = [
   {
@@ -71,9 +67,6 @@ const HOW_IT_WORKS_STEPS = [
     ),
   },
 ];
-/* =========================================================
-   HERO CONTENT (UNCHANGED)
-========================================================= */
 
 const HERO_CONTENT = {
   badge: "AI-Powered Pharmacogenomic Risk Analysis",
@@ -90,10 +83,6 @@ const HERO_CONTENT = {
     { id: "ai", text: "AI Clinical Explanation" },
   ],
 };
-
-/* =========================================================
-   HERO SECTION (UNCHANGED)
-========================================================= */
 
 function Hero() {
   const [isVisible, setIsVisible] = useState(false);
@@ -161,10 +150,6 @@ function Hero() {
   );
 }
 
-/* =========================================================
-   REUSABLE CARD COMPONENT
-========================================================= */
-
 function GlassCard({ title, description, delay }) {
   return (
     <motion.div
@@ -179,10 +164,6 @@ function GlassCard({ title, description, delay }) {
   );
 }
 
-/* =========================================================
-   HOMEPAGE
-========================================================= */
-
 export default function HomePage() {
   return (
     <div className="relative text-white bg-slate-950 overflow-hidden">
@@ -192,10 +173,7 @@ export default function HomePage() {
 
       <Hero />
 
-      {/* ================= HOW IT WORKS ================= */}
-
       <section className="relative py-28 bg-slate-950 text-white overflow-hidden">
-        {/* subtle gradient glow */}
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_10%,rgba(6,182,212,0.12)_0%,transparent_60%)]" />
 
         <div className="relative max-w-7xl mx-auto px-6">
@@ -203,9 +181,10 @@ export default function HomePage() {
           <motion.div
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.9 }}
+            transition={{ duration: 0.8 }}
             viewport={{ once: true }}
             className="text-center mb-20"
+            id="steps"
           >
             <p className="text-cyan-400 uppercase tracking-widest text-sm mb-4">
               Process
@@ -224,7 +203,7 @@ export default function HomePage() {
                 key={index}
                 initial={{ opacity: 0, y: 40 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.3 }}
+                transition={{ delay: index * 0.2 }}
                 whileHover={{ y: -8 }}
                 viewport={{ once: true }}
                 className="group relative bg-slate-900 border border-cyan-500/20 p-8 rounded-2xl transition-all duration-300 hover:border-cyan-400/50 hover:shadow-[0_0_30px_rgba(6,182,212,0.15)]"
@@ -252,84 +231,100 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ================= PLATFORM FEATURES ================= */}
-
-      <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-        {[
-          {
-            title: "VCF Parsing",
-            icon: (
-              <svg
-                className="w-6 h-6"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                viewBox="0 0 24 24"
-              >
-                <path d="M14 2H6a2 2 0 00-2 2v16l6-3 6 3V8z" />
-              </svg>
-            ),
-          },
-          {
-            title: "Star Allele Detection",
-            icon: (
-              <svg
-                className="w-6 h-6"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                viewBox="0 0 24 24"
-              >
-                <path d="M4 7c4-4 12-4 16 0M4 17c4 4 12 4 16 0" />
-              </svg>
-            ),
-          },
-          {
-            title: "Drug Risk Classification",
-            icon: (
-              <svg
-                className="w-6 h-6"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                viewBox="0 0 24 24"
-              >
-                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-              </svg>
-            ),
-          },
-          {
-            title: "Explainable AI Reports",
-            icon: (
-              <svg
-                className="w-6 h-6"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                viewBox="0 0 24 24"
-              >
-                <path d="M9 12h6M9 16h6M9 8h6" />
-              </svg>
-            ),
-          },
-        ].map((feature, index) => (
+      <section className="relative py-24 bg-slate-950 text-white overflow-hidden">
+        <div className="relative max-w-7xl mx-auto px-6">
           <motion.div
-            key={index}
-            whileHover={{ scale: 1.05 }}
-            className="bg-slate-900 border border-cyan-500/20 p-8 rounded-2xl"
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
           >
-            <div className="w-12 h-12 bg-cyan-500/20 rounded-xl flex items-center justify-center text-cyan-400 mb-6">
-              {feature.icon}
-            </div>
-            <h3 className="font-semibold mb-3">{feature.title}</h3>
-            <p className="text-sm text-gray-400">
-              Advanced pharmacogenomic intelligence.
+            <p className="text-cyan-400 uppercase tracking-widest text-sm mb-4">
+              Platform Capabilities
+            </p>
+            <h2 className="text-4xl font-bold mb-4">Core Features</h2>
+            <p className="text-gray-400 max-w-2xl mx-auto">
+              Advanced pharmacogenomic intelligence powered by AI.
             </p>
           </motion.div>
-        ))}
-      </div>
 
-      {/* ================= DRUG SAFETY LEVELS ================= */}
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {[
+              {
+                title: "VCF Parsing",
+                icon: (
+                  <svg
+                    className="w-6 h-6"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    viewBox="0 0 24 24"
+                  >
+                    <path d="M14 2H6a2 2 0 00-2 2v16l6-3 6 3V8z" />
+                  </svg>
+                ),
+              },
+              {
+                title: "Star Allele Detection",
+                icon: (
+                  <svg
+                    className="w-6 h-6"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    viewBox="0 0 24 24"
+                  >
+                    <path d="M4 7c4-4 12-4 16 0M4 17c4 4 12 4 16 0" />
+                  </svg>
+                ),
+              },
+              {
+                title: "Drug Risk Classification",
+                icon: (
+                  <svg
+                    className="w-6 h-6"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    viewBox="0 0 24 24"
+                  >
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                  </svg>
+                ),
+              },
+              {
+                title: "Explainable AI Reports",
+                icon: (
+                  <svg
+                    className="w-6 h-6"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    viewBox="0 0 24 24"
+                  >
+                    <path d="M9 12h6M9 16h6M9 8h6" />
+                  </svg>
+                ),
+              },
+            ].map((feature, index) => (
+              <motion.div
+                key={index}
+                whileHover={{ scale: 1.05 }}
+                className="bg-slate-900 border border-cyan-500/20 p-8 rounded-2xl"
+              >
+                <div className="w-12 h-12 bg-cyan-500/20 rounded-xl flex items-center justify-center text-cyan-400 mb-6">
+                  {feature.icon}
+                </div>
+                <h3 className="font-semibold mb-3">{feature.title}</h3>
+                <p className="text-sm text-gray-400">
+                  Advanced pharmacogenomic intelligence.
+                </p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
 
       <section className="relative py-24 bg-slate-950 text-white overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_20%,rgba(6,182,212,0.12)_0%,transparent_60%)]" />

@@ -11,10 +11,6 @@ import {
 } from "recharts";
 import GeneVisualizer from "../components/GeneVisualizer";
 
-/* =========================
-   RISK COLOR MAP
-========================= */
-
 const RISK_COLORS = {
   Safe: "#22c55e",
   "Adjust Dosage": "#f59e0b",
@@ -23,20 +19,12 @@ const RISK_COLORS = {
   Unknown: "#a855f7",
 };
 
-/* =========================
-   DASHBOARD
-========================= */
-
 export default function Dashboard() {
   const { analysisId } = useParams();
   const [data, setData] = useState(null);
   const [selectedGene, setSelectedGene] = useState("ALL");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-
-  /* =========================
-       FETCH DATA
-    ========================= */
 
   useEffect(() => {
     const fetchData = async () => {
@@ -56,12 +44,8 @@ export default function Dashboard() {
       }
     };
 
-    fetchData();
+    if (analysisId) fetchData();
   }, [analysisId]);
-
-  /* =========================
-       LOADING / ERROR
-    ========================= */
 
   if (loading)
     return (
@@ -77,18 +61,17 @@ export default function Dashboard() {
       </div>
     );
 
-  /* =========================
-       FILTER LOGIC
-    ========================= */
+  if (!data || !data.results)
+    return (
+      <div className="min-h-screen bg-slate-950 text-white flex items-center justify-center">
+        No data available.
+      </div>
+    );
 
   const filteredResults =
     selectedGene === "ALL"
       ? data.results
       : data.results.filter((r) => r.primary_gene === selectedGene);
-
-  /* =========================
-   3D VARIANT EXTRACTION
-========================= */
 
   const helixVariants = filteredResults.flatMap((result) =>
     (result.pharmacogenomic_profile?.detected_variants || []).map((v) => ({
@@ -98,18 +81,10 @@ export default function Dashboard() {
     })),
   );
 
-  /* =========================
-       CHART DATA
-    ========================= */
-
   const chartData = filteredResults.map((item) => ({
     drug: item.drug,
     confidence: Math.round(item.confidence_score * 100),
   }));
-
-  /* =========================
-       EXPORT JSON
-    ========================= */
 
   const downloadJSON = () => {
     const blob = new Blob([JSON.stringify(data, null, 2)], {
@@ -126,14 +101,9 @@ export default function Dashboard() {
     navigator.clipboard.writeText(JSON.stringify(data, null, 2));
   };
 
-  /* =========================
-       UI
-    ========================= */
-
   return (
     <div className="min-h-screen bg-slate-950 text-white px-6 py-12">
       <div className="max-w-6xl mx-auto">
-        {/* TITLE */}
         <h1 className="text-3xl font-bold mb-8">Risk Assessment Results</h1>
 
         {/* GENE FILTER */}
@@ -196,45 +166,19 @@ export default function Dashboard() {
                   {Math.round(result.confidence_score * 100)}%
                 </p>
               </div>
-
-              <details className="mt-4 text-sm">
-                <summary className="cursor-pointer text-cyan-400">
-                  Clinical Recommendation
-                </summary>
-                <p className="mt-2 text-gray-300">
-                  {result.clinical_recommendation}
-                </p>
-              </details>
-
-              <details className="mt-4 text-sm">
-                <summary className="cursor-pointer text-cyan-400">
-                  AI Explanation
-                </summary>
-                <p className="mt-2 text-gray-300">
-                  {result.llm_generated_explanation?.summary}
-                </p>
-              </details>
             </div>
           ))}
         </div>
 
-        {/* =========================
-   3D GENE VISUALIZATION
-========================= */}
-
+        {/* 3D Visualization */}
         <div className="mb-12">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-xl font-semibold text-cyan-400">
-              3D Gene Variant Visualization
-            </h2>
-            <span className="text-sm text-gray-400">
-              Interactive genomic mapping
-            </span>
-          </div>
+          <h2 className="text-xl font-semibold text-cyan-400 mb-4">
+            3D Gene Variant Visualization
+          </h2>
 
           {helixVariants.length === 0 ? (
             <div className="bg-slate-900 p-6 rounded-2xl border border-cyan-500/20 text-gray-400">
-              No variants detected for this gene.
+              No variants detected.
             </div>
           ) : (
             <GeneVisualizer
@@ -246,7 +190,7 @@ export default function Dashboard() {
           )}
         </div>
 
-        {/* CONFIDENCE CHART */}
+        {/* Chart */}
         <div className="bg-slate-900 p-6 rounded-2xl border border-cyan-500/20 mb-12">
           <h2 className="text-lg font-semibold mb-4">Confidence Overview</h2>
 

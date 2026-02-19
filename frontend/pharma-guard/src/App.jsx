@@ -4,6 +4,7 @@ import Layout from "../components/layout.jsx";
 import UploadPage from "../components/genomeupload.jsx";
 import ContactPage from "../components/ContactPage.jsx";
 import Dashboard from "../components/Dashboard.jsx";
+import PatientLookup from "../components/PatientLookup.jsx";
 
 import Azathioprine from "../components/Drugs/Azathioprine";
 import Clopidogrel from "../components/Drugs/Clopidogrel";
@@ -28,8 +29,15 @@ function App() {
             <Route element={<Layout />}>
                 <Route path="/" element={<HomePage />} />
                 <Route path="/upload" element={<UploadPage />} />
+
                 <Route path="/contact" element={<ContactPage />} />
                 <Route path="/dashboard/:analysisId" element={<Dashboard />} />
+                <Route path="/dashboard" element={<PatientLookup />} />
+
+
+
+
+
 
                 {/* Drug Wiki Pages */}
 
