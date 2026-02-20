@@ -32,7 +32,7 @@ export default function Dashboard() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`/api/analysis/${analysisId}`);
+        const response = await fetch(`https://expert-system-leug.onrender.com/api/results/${analysisId}`);
         const result = await response.json();
 
         if (!response.ok) {
@@ -71,23 +71,28 @@ export default function Dashboard() {
       </div>
     );
 
-  const filteredResults =
-    selectedGene === "ALL"
-      ? data.results
-      : data.results.filter((r) => r.primary_gene === selectedGene);
+const filteredResults =
+  selectedGene === "ALL"
+    ? data.results
+    : data.results.filter(
+        (r) =>
+          r.pharmacogenomic_profile.primary_gene === selectedGene
+      );
+
 
   const helixVariants = filteredResults.flatMap((result) =>
-    (result.pharmacogenomic_profile?.detected_variants || []).map((v) => ({
-      rsid: v.rsid,
-      position: v.position,
-      risk_label: result.risk_label,
-    })),
-  );
+  (result.pharmacogenomic_profile.detected_variants || []).map((v) => ({
+    rsid: v.rsid,
+    position: v.position,
+    risk_label: result.risk_assessment.risk_label,
+  })),
+);
 
-  const chartData = filteredResults.map((item) => ({
-    drug: item.drug,
-    confidence: Math.round(item.confidence_score * 100),
-  }));
+const chartData = filteredResults.map((item) => ({
+  drug: item.drug,
+  confidence: 100,
+}));
+
 
   const downloadJSON = () => {
     const blob = new Blob([JSON.stringify(data, null, 2)], {
@@ -146,27 +151,29 @@ export default function Dashboard() {
                 <span
                   className="px-3 py-1 rounded-full text-sm font-medium"
                   style={{
-                    backgroundColor: RISK_COLORS[result.risk_label] + "33",
-                    color: RISK_COLORS[result.risk_label],
+                    backgroundColor: RISK_COLORS[result.risk_assessment.risk_label] + "33",
+                    color: RISK_COLORS[result.risk_assessment.risk_label],
                   }}
                 >
-                  {result.risk_label}
+                  {result.risk_assessment.risk_label}
                 </span>
               </div>
 
               <div className="text-sm text-gray-400 space-y-1">
                 <p>
-                  <strong>Gene:</strong> {result.primary_gene}
+                  <strong>Gene:</strong> {result.pharmacogenomic_profile.primary_gene}
                 </p>
                 <p>
-                  <strong>Diplotype:</strong> {result.diplotype}
+                  {result.diplotype && (
+                  <p><strong>Diplotype:</strong> {result.pharmacogenomic_profile.diplotype}</p>
+                  )}
                 </p>
                 <p>
-                  <strong>Phenotype:</strong> {result.phenotype}
+                  <strong>Phenotype:</strong> {result.pharmacogenomic_profile.phenotype}
                 </p>
                 <p>
                   <strong>Confidence:</strong>{" "}
-                  {Math.round(result.confidence_score * 100)}%
+                  {Math.round(result.risk_assessment.confidence_score * 100)}%
                 </p>
               </div>
             </div>

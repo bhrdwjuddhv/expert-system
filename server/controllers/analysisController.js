@@ -31,21 +31,58 @@ const analysisController = {
 
       // 4️⃣ Classify risks
       const riskResult = riskEngine.classify(phenotypes, drugs);
-      const resultsArray = riskResult.drug_results; // ✅ extract array
+      const resultsArray = riskResult.drug_results;
 
-      // 5️⃣ Generate LLM explanations (returns merged array)
+      // 5️⃣ Generate LLM explanations
       const explainedResults = await llmService.explain(resultsArray);
 
-      // 6️⃣ Save to MongoDB (must be ARRAY)
+      // 6️⃣ Create patient ID
+      const patientId = `PATIENT_${Date.now()}`;
+
+      // 7️⃣ Transform into REQUIRED STRUCTURE
+      const formattedResults = explainedResults.map((r) => ({
+        patient_id: patientId,
+        drug: r.drug,
+        timestamp: new Date().toISOString(),
+
+        risk_assessment: {
+          risk_label: r.risk_label,
+          confidence_score: r.confidence_score || 0.9,
+          severity: r.severity || "none",
+        },
+
+        pharmacogenomic_profile: {
+          primary_gene: r.gene,
+          diplotype: r.diplotype || "Unknown",
+          phenotype: convertPhenotypeShort(r.phenotype),
+          detected_variants: (r.variants || []).map((v) => ({
+            rsid: v.rsid || "Unknown",
+          })),
+        },
+
+        clinical_recommendation:
+          r.clinical_recommendation || {},
+
+        llm_generated_explanation: {
+          summary:
+            r.llm_explanation || "No explanation available.",
+        },
+
+        quality_metrics: {
+          vcf_parsing_success: true,
+        },
+      }));
+
+      // 8️⃣ Save formatted structure to MongoDB
       const analysis = await Analysis.create({
-        patient_id: `PATIENT_${Date.now()}`,
-        results: explainedResults,
+        patient_id: patientId,
+        results: formattedResults,
       });
 
-      // 7️⃣ Return results
+      // 9️⃣ Return formatted output
       return res.status(200).json({
         analysisId: analysis._id,
-        results: explainedResults,
+        results: formattedResults,
       });
 
     } catch (error) {
@@ -88,5 +125,21 @@ const analysisController = {
     }
   },
 };
+
+// ===============================
+// HELPER FUNCTIONS
+// ===============================
+
+function convertPhenotypeShort(phenotype) {
+  const map = {
+    "Poor Metabolizer": "PM",
+    "Intermediate Metabolizer": "IM",
+    "Normal Metabolizer": "NM",
+    "Rapid Metabolizer": "RM",
+    "Ultra Rapid Metabolizer": "URM",
+  };
+
+  return map[phenotype] || "Unknown";
+}
 
 export default analysisController;

@@ -18,15 +18,28 @@
 # Content-Disposition: form-data; name="vcfFile"; filename="sample.vcf"
 # Content-Type: text/plain
 
-# < ./sample.vcf
+# < ./test.vcf
 # --boundary--
 
 
-# ### Clinical Chat
+### Clinical Chat
+# POST http://localhost:5000/api/analyze/
+# Content-Type: application/json
+
+# {
+#   "uploadId": "38316b24-cb0d-416d-bc62-e925c53c4cf9",
+#   "drugs": "CODEINE"
+# }
+
+# Analysis ID : 699745d28fff6979b09ed0fd
+## Clinical Chat Test
 # POST http://localhost:5000/api/chat
 # Content-Type: application/json
 
 # {
-#   "analysisId": "65f8a7c9d41b2a1234567890",
-#   "question": "Why is codeine not recommended?"
+#   "analysisId": "699745d28fff6979b09ed0fd",
+#   "question": "Why is codeine not recommended for this patient?"
 # }
+
+
+# GET http://localhost:5000/api/results/699745d28fff6979b09ed0fd

@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import DNAMolecule from "./gene/DNAMolecule.jsx";
+import { useNavigate } from "react-router-dom";
+
+// const navigate = useNavigate();
 
 const HOW_IT_WORKS_STEPS = [
   {
@@ -87,7 +90,7 @@ const HERO_CONTENT = {
 
 function Hero() {
   const [isVisible, setIsVisible] = useState(false);
-
+  const navigate = useNavigate(); // ← add here
   useEffect(() => {
     setIsVisible(true);
   }, []);
@@ -128,6 +131,15 @@ function Hero() {
             {HERO_CONTENT.buttons.map((btn, i) => (
               <button
                 key={btn.id}
+                onClick={() => {
+                  if (btn.action === "upload") {
+                    navigate("/upload");
+                  } else if (btn.action === "scroll") {
+                    document
+                      .getElementById("steps")
+                      ?.scrollIntoView({ behavior: "smooth" });
+                  }
+                }}
                 className={
                   i === 0
                     ? "cursor-pointer rounded-full bg-cyan-600 px-8 py-4 font-semibold text-white shadow-lg transition hover:scale-105 hover:bg-cyan-700"
@@ -136,6 +148,7 @@ function Hero() {
               >
                 {btn.label}
               </button>
+
             ))}
           </div>
         </div>

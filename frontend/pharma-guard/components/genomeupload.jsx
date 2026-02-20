@@ -87,44 +87,64 @@ export default function UploadPage() {
        SUBMIT HANDLER
     ========================= */
 
-    const handleSubmit = async () => {
-        if (!file) {
-            setError("Please upload a VCF file.");
-            return;
+const handleSubmit = async () => {
+    if (!file) {
+        setError("Please upload a VCF file.");
+        return;
+    }
+
+    if (selectedDrugs.length === 0) {
+        setError("Please select at least one drug.");
+        return;
+    }
+
+    setError("");
+    setLoading(true);
+
+    try {
+        // 1️⃣ Upload file
+        const formData = new FormData();
+        formData.append("vcfFile", file); // IMPORTANT: must match backend field name
+
+        const uploadResponse = await fetch("https://expert-system-leug.onrender.com/api/upload", {
+            method: "POST",
+            body: formData,
+        });
+        console.log(uploadResponse);
+        const uploadData = await uploadResponse.json();
+
+        if (!uploadResponse.ok) {
+            throw new Error(uploadData.message || "Upload failed.");
         }
 
-        if (selectedDrugs.length === 0) {
-            setError("Please select at least one drug.");
-            return;
+        const uploadId = uploadData.uploadId;
+
+        // 2️⃣ Call analyze API
+        const analyzeResponse = await fetch("https://expert-system-leug.onrender.com/api/analyze", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                uploadId,
+                drugs: selectedDrugs.join(","),
+            }),
+        });
+
+        const analyzeData = await analyzeResponse.json();
+
+        if (!analyzeResponse.ok) {
+            throw new Error(analyzeData.message || "Analysis failed.");
         }
-
-        setError("");
-        setLoading(true);
-
-        try {
-            const formData = new FormData();
-            formData.append("file", file);
-            formData.append("drugs", JSON.stringify(selectedDrugs));
-
-            const response = await fetch("/api/upload", {
-                method: "POST",
-                body: formData,
-            });
-
-            const result = await response.json();
-
-            if (!response.ok) {
-                throw new Error(result.message || "Upload failed.");
-            }
-
-            // Navigate to dashboard with returned analysis ID
-            navigate(`/dashboard/${result.analysisId}`);
-        } catch (err) {
-            setError(err.message);
-        } finally {
-            setLoading(false);
-        }
-    };
+        console.log(analyzeData);
+        // 3️⃣ Navigate using returned analysisId
+        navigate(`/dashboard/${analyzeData.analysisId}`);
+    } catch (err) {
+        setError(err.message);
+    } finally {
+        setLoading(false);
+    }
+};
 
     /* =========================
        UI
