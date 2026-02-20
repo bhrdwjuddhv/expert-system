@@ -106,7 +106,7 @@ const handleSubmit = async () => {
         const formData = new FormData();
         formData.append("vcfFile", file); // IMPORTANT: must match backend field name
 
-        const uploadResponse = await fetch("http://localhost:5000/api/upload", {
+        const uploadResponse = await fetch("https://expert-system-leug.onrender.com/api/upload", {
             method: "POST",
             body: formData,
         });
@@ -120,7 +120,7 @@ const handleSubmit = async () => {
         const uploadId = uploadData.uploadId;
 
         // 2️⃣ Call analyze API
-        const analyzeResponse = await fetch("http://localhost:5000/api/analyze", {
+        const analyzeResponse = await fetch("https://expert-system-leug.onrender.com/api/analyze", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

@@ -32,7 +32,7 @@ export default function Dashboard() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`http://localhost:5000/api/results/${analysisId}`);
+        const response = await fetch(`https://expert-system-leug.onrender.com/api/results/${analysisId}`);
         const result = await response.json();
 
         if (!response.ok) {
