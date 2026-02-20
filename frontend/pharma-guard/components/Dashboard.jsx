@@ -181,7 +181,7 @@ const chartData = filteredResults.map((item) => ({
         </div>
 
         {/* 3D Visualization */}
-        <div className="mb-12">
+        {/* <div className="mb-12">
           <h2 className="text-xl font-semibold text-cyan-400 mb-4">
             3D Gene Variant Visualization
           </h2>
@@ -198,7 +198,7 @@ const chartData = filteredResults.map((item) => ({
               variants={helixVariants}
             />
           )}
-        </div>
+        </div> */}
 
         {/* Chart */}
         <div className="bg-slate-900 p-6 rounded-2xl border border-cyan-500/20 mb-12">

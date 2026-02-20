@@ -30,7 +30,9 @@ mongoose.connect(process.env.DB_URI)
    MIDDLEWARE
 ============================= */
 
-app.use(cors());
+app.use(cors({
+  origin: "https://expert-system-iota.vercel.app",
+}));
 app.use(express.json());
 app.use("/api", apiRoutes);
 

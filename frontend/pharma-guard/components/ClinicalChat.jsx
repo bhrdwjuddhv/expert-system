@@ -19,10 +19,12 @@ export default function ClinicalChat() {
         const userMessage = { role: "user", content: input };
         setMessages((prev) => [...prev, userMessage]);
         setInput("");
+        console.log(input);
+        console.log(analysisId);
         setLoading(true);
 
         try {
-            const res = await fetch("http://localhost:5000/api/chat", {
+            const res = await fetch("https://expert-system-leug.onrender.com/api/chat", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
